@@ -1,0 +1,15 @@
+{
+  "name": "satu-serang-api",
+  "version": "1.0.0",
+  "description": "API untuk Modul Kepegawaian KPKNL Serang",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodeman server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.0.0",
+    "mongoose": "^8.x.x"
+  }
+}

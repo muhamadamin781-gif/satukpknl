@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SATU KPKNL SERANG - Integrated System</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        .animate-in { animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 overflow-hidden">
+
+    <div id="app-container">
+        <div id="loader-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-white">
+            <div class="text-center">
+                <div class="w-16 h-16 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                <p class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Memuat Sistem...</p>
+            </div>
+        </div>
+
+        <div id="login-screen" class="hidden min-h-screen"></div>
+
+        <div id="main-layout" class="hidden h-screen flex overflow-hidden">
+            </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <script src="assets/js/modules/kepegawaian.js"></script> <script src="assets/js/modules/dashboard.js"></script>
+    <script src="assets/js/modules/presensi.js"></script>
+    <script src="assets/js/modules/kendaraan.js"></script>
+    <script src="assets/js/modules/rumah tangga.js"></script> 
+    <script src="assets/js/modules/cuti.js"></script>
+    <script src="assets/js/modules/approval.js"></script>
+    <script src="assets/js/modules/tiket.js"></script>
+    <script src="assets/js/modules/ekspedisi.js"></script>
+    <script src="assets/js/modules/settings.js"></script>
+    
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/auth.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = sessionStorage.getItem('pegawai_active_session');
+            const loader = document.getElementById('loader-screen');
+            const loginScreen = document.getElementById('login-screen');
+            const mainLayout = document.getElementById('main-layout');
+            
+            // Simulasi loading singkat agar transisi smooth
+            setTimeout(() => {
+                loader.classList.add('hidden');
+
+                if (!user) {
+                    // Tampilkan Form Login jika tidak ada sesi
+                    loginScreen.classList.remove('hidden');
+                    loginScreen.innerHTML = `
+                        <div class="flex items-center justify-center min-h-screen bg-slate-100 px-4">
+                            <form id="login-form" class="bg-white p-10 md:p-12 rounded-[3rem] shadow-2xl w-full max-w-md animate-in text-center">
+                                <div class="mb-8">
+                                    <div class="w-20 h-20 bg-indigo-600 rounded-[2rem] flex items-center justify-center mx-auto mb-4 shadow-xl shadow-indigo-100">
+                                        <i class="fas fa-fingerprint text-white text-3xl"></i>
+                                    </div>
+                                    <h2 class="text-3xl font-black italic tracking-tighter text-slate-800 uppercase">Satu Login</h2>
+                                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-2">KPKNL Serang Integrated System</p>
+                                </div>
+                                <div class="space-y-4 text-left">
+                                    <input type="text" id="login_nip" placeholder="NIP / USERNAME" required
+                                        class="w-full px-6 py-4 bg-slate-50 border-2 border-transparent focus:border-indigo-500 rounded-2xl font-bold outline-none transition-all">
+                                    <input type="password" id="login_password" placeholder="PASSWORD" required
+                                        class="w-full px-6 py-4 bg-slate-50 border-2 border-transparent focus:border-indigo-500 rounded-2xl font-bold outline-none transition-all">
+                                    
+                                    <button type="submit" 
+                                        class="w-full bg-slate-900 hover:bg-indigo-600 text-white py-5 rounded-[2rem] font-black uppercase text-xs tracking-[0.2em] shadow-xl transition-all active:scale-95">
+                                        Masuk Sekarang
+                                    </button>
+                                </div>
+                                <p id="error-msg" class="text-red-500 text-[10px] font-black uppercase mt-4 hidden">NIP atau Password Salah!</p>
+                                <p class="mt-8 text-[9px] font-bold text-slate-300 uppercase tracking-widest">Gunakan NIP Admin: 19900101</p>
+                            </form>
+                        </div>
+                    `;
+                    // Hubungkan ulang Auth.js ke form yang baru dibuat
+                    if(window.Auth) Auth.init();
+                } else {
+                    // Masuk ke Dashboard Utama
+                    mainLayout.classList.remove('hidden');
+                    if(window.App) App.init(); 
+                }
+            }, 800);
+        });
+    </script>
+</body>
+</html>
